@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BT Remote Pro</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#08090b;color:#f3f1ef;font-family:Arial,sans-serif}
+.app{max-width:430px;min-height:100vh;margin:auto;padding:18px;background:radial-gradient(circle at 50% 30%,#22252c,#0d0f12 68%)}
+header{display:flex;align-items:center;gap:12px}.head{flex:1;text-align:center}.head h1{font-size:22px;margin:0}.head p{margin:4px 0;color:#f19a72;font-size:14px}
+.icon{width:70px;height:70px;border:1px solid #343943;border-radius:18px;background:#1d2027;color:#eee;font-size:30px}
+.remote{display:flex;gap:15px;align-items:center;margin-top:20px}.dpad{position:relative;flex:1;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#242832 0 29%,#151820 30% 60%,#0b0d12 61%);border:2px solid #30343e;box-shadow:0 0 30px #000}
+.dpad button{position:absolute;background:none;border:0;color:#eee;font-size:38px}.up{top:6px;left:44%}.down{bottom:6px;left:44%}.left{left:7px;top:43%}.right{right:7px;top:43%}
+.ok{inset:30%;margin:auto;width:40%;height:40%;border-radius:50%;background:#262b35!important;font-size:24px!important}
+.vol{width:68px;height:270px;border:2px solid #292d35;border-radius:38px;display:flex;flex-direction:column;align-items:center;padding:12px 0}.vol button{background:none;border:0;color:white;font-size:30px}.bar{flex:1;width:42px;border-radius:22px;background:#11131a;overflow:hidden;display:flex;align-items:flex-end}.fill{width:100%;height:55%;background:#f19a72}
+.media{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:22px 0}.media button,.tool button{border:0;border-radius:50%;background:#20232b;color:#fff;height:58px;font-size:19px}.media .play{background:#f19a72;box-shadow:0 0 25px #f19a7266}
+.tools{border-top:1px solid #303238;padding-top:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px 8px}.tool{text-align:center;color:#aaa}.tool button{width:58px}.tool span{display:block;font-size:11px;margin-top:5px}
+#status{margin:10px 0;text-align:center;color:#aaa;font-size:12px}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<button class="icon" onclick="alert('Meny')">☰</button>
+<div class="head"><h1>BT Remote Pro</h1><p id="status">Bluetooth: inte ansluten</p></div>
+<button class="icon" onclick="alert('Inställningar')">⚙</button>
+</header>
+<div style="text-align:center;margin:8px"><button onclick="connect()" style="padding:10px 18px;border:0;border-radius:12px">Anslut Bluetooth</button></div>
+<section class="remote">
+<div class="dpad">
+<button class="up" onclick="cmd('UP')">⌃</button><button class="left" onclick="cmd('LEFT')">‹</button>
+<button class="ok" onclick="cmd('OK')">OK</button><button class="right" onclick="cmd('RIGHT')">›</button><button class="down" onclick="cmd('DOWN')">⌄</button>
+</div>
+<div class="vol"><button onclick="volume(10)">+</button><div class="bar"><div id="fill" class="fill"></div></div><button onclick="volume(-10)">−</button></div>
+</section>
+<div class="media"><button onclick="cmd('PREV')">◀</button><button onclick="cmd('REW')">|◀</button><button class="play" onclick="cmd('PLAY')">▶</button><button onclick="cmd('NEXT')">▶|</button><button onclick="cmd('BACK')">↶</button></div>
+<div class="tools">
+<div class="tool"><button>◷</button><span>Sleep Timer</span></div><div class="tool"><button>▣</button><span>Full Screen</span></div><div class="tool"><button>⚙</button><span>Settings</span></div><div class="tool"><button>🎙</button><span>Voice Search</span></div>
+<div class="tool"><button>☀</button><span>Brightness</span></div><div class="tool"><button>〽</button><span>Sound Mode</span></div><div class="tool"><button>↪</button><span>Input</span></div><div class="tool"><button>▦</button><span>Apps</span></div>
+</div>
+</div>
+<script>
+let vol=55;
+function volume(n){vol=Math.max(0,Math.min(100,vol+n));document.getElementById('fill').style.height=vol+'%'}
+function cmd(c){document.getElementById('status').textContent='Bluetooth: kommando '+c}
+async function connect(){
+ if(!navigator.bluetooth){document.getElementById('status').textContent='Web Bluetooth stöds inte i denna webbläsare';return}
+ try{await navigator.bluetooth.requestDevice({acceptAllDevices:true});document.getElementById('status').textContent='Bluetooth: enhet vald'}catch(e){document.getElementById('status').textContent='Bluetooth: ingen enhet vald'}
+}
+</script>
+</body>
+</html>
